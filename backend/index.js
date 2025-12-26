@@ -6,11 +6,11 @@ const bodyParser = require('body-parser');
 
 // MySQL连接（生产部署时用环境变量注入，避免把密码写进代码）
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || '127.0.0.1',
-  port: parseInt(process.env.DB_PORT || '3306', 10),
-  user: process.env.DB_USER || 'bookapp',
-  password: process.env.DB_PASSWORD || 'lalala123',
-  database: process.env.DB_NAME || 'book'
+  host: '127.0.0.1',
+  port:  '3306',
+  user: 'bookapp',
+  password: 'lalala123',
+  database: 'book'
 });
 
 
