@@ -36,25 +36,29 @@ const MINIO_BUCKET = process.env.MINIO_BUCKET || 'book-files';
 const MINIO_AUTO_CREATE_BUCKET = String(process.env.MINIO_AUTO_CREATE_BUCKET || 'false').toLowerCase() === 'true';
 
 
-minioClient.bucketExists(MINIO_BUCKET, (err) => {
+minioClient.bucketExists(MINIO_BUCKET, (err, exists) => {
   if (err) {
-    // 只有显式开启时才尝试创建 bucket，避免线上因为权限不足导致启动失败/循环报错
-    if (MINIO_AUTO_CREATE_BUCKET && err.code === 'NoSuchBucket') {
-      minioClient.makeBucket(MINIO_BUCKET, 'us-east-1', (mkErr) => {
-        if (mkErr) {
-          console.error('创建 MinIO bucket 失败:', mkErr);
-        } else {
-          console.log('已创建 MinIO bucket:', MINIO_BUCKET);
-        }
-      });
-    } else {
-      console.error('检查 MinIO bucket 失败:', err);
-    }
-  } else {
-    console.log('MinIO bucket 已存在:', MINIO_BUCKET);
+    console.error('检查 MinIO bucket 失败:', err);
+    return;
   }
-});
 
+  if (exists) {
+    console.log('MinIO bucket 已存在:', MINIO_BUCKET);
+    return;
+  }
+
+  console.warn('MinIO bucket 不存在:', MINIO_BUCKET);
+
+  if (!MINIO_AUTO_CREATE_BUCKET) return;
+
+  minioClient.makeBucket(MINIO_BUCKET, 'us-east-1', (mkErr) => {
+    if (mkErr) {
+      console.error('创建 MinIO bucket 失败:', mkErr);
+    } else {
+      console.log('已创建 MinIO bucket:', MINIO_BUCKET);
+    }
+  });
+});
 const app = express();
 
 // CORS：开发阶段可放开；生产建议设置 CORS_ORIGIN（例如 https://yourdomain.com）
