@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const db = mysql.createConnection({
   host: process.env.DB_HOST || '127.0.0.1',
   port: parseInt(process.env.DB_PORT || '3306', 10),
-  user: process.env.DB_USER || 'root',
+  user: process.env.DB_USER || 'bookapp',
   password: process.env.DB_PASSWORD || 'lalala123',
   database: process.env.DB_NAME || 'book'
 });
