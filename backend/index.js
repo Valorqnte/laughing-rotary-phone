@@ -28,8 +28,8 @@ const minioClient = new Minio.Client({
   endPoint: process.env.MINIO_ENDPOINT || '127.0.0.1',
   port: parseInt(process.env.MINIO_PORT || '9000', 10),
   useSSL: String(process.env.MINIO_USE_SSL || 'false').toLowerCase() === 'true',
-  accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
-  secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin123'
+  accessKey: process.env.MINIO_ACCESS_KEY || '',
+  secretKey: process.env.MINIO_SECRET_KEY || ''
 });
 
 const MINIO_BUCKET = process.env.MINIO_BUCKET || 'book-files';
